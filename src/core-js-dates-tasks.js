@@ -47,8 +47,17 @@ function getTime(date) {
  * '03 Dec 1995 00:12:00 UTC' => 'Sunday'
  * '2024-01-30T00:00:00.000Z' => 'Tuesday'
  */
-function getDayName(/* date */) {
-  throw new Error('Not implemented');
+function getDayName(date) {
+  const DAYS_OF_WEEK = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  return DAYS_OF_WEEK[new Date(date).getUTCDay()];
 }
 
 /**
@@ -62,8 +71,11 @@ function getDayName(/* date */) {
  * Date('2024-02-13T00:00:00Z') => Date('2024-02-16T00:00:00Z')
  * Date('2024-02-16T00:00:00Z') => Date('2024-02-23T00:00:00Z')
  */
-function getNextFriday(/* date */) {
-  throw new Error('Not implemented');
+function getNextFriday(date) {
+  const dayNeed = 5;
+  const dayNow = date.getUTCDay();
+  const dayDiff = dayNeed <= dayNow ? 7 - dayNow + dayNeed : dayNeed - dayNow;
+  return new Date(date.getTime() + dayDiff * 24 * 3600 * 1000);
 }
 
 /**
@@ -77,8 +89,8 @@ function getNextFriday(/* date */) {
  * 1, 2024 => 31
  * 2, 2024 => 29
  */
-function getCountDaysInMonth(/* month, year */) {
-  throw new Error('Not implemented');
+function getCountDaysInMonth(month, year) {
+  return new Date(year, month, 0).getDate();
 }
 
 /**
@@ -92,8 +104,12 @@ function getCountDaysInMonth(/* month, year */) {
  * '2024-02-01T00:00:00.000Z', '2024-02-02T00:00:00.000Z'  => 2
  * '2024-02-01T00:00:00.000Z', '2024-02-12T00:00:00.000Z'  => 12
  */
-function getCountDaysOnPeriod(/* dateStart, dateEnd */) {
-  throw new Error('Not implemented');
+function getCountDaysOnPeriod(dateStart, dateEnd) {
+  return (
+    Math.ceil(
+      (Date.parse(dateEnd) - Date.parse(dateStart)) / (24 * 3600 * 1000)
+    ) + 1
+  );
 }
 
 /**
@@ -113,8 +129,11 @@ function getCountDaysOnPeriod(/* dateStart, dateEnd */) {
  * '2024-02-02', { start: '2024-02-02', end: '2024-03-02' } => true
  * '2024-02-10', { start: '2024-02-02', end: '2024-03-02' } => true
  */
-function isDateInPeriod(/* date, period */) {
-  throw new Error('Not implemented');
+function isDateInPeriod(date, period) {
+  return (
+    Date.parse(date) >= Date.parse(period.start) &&
+    Date.parse(date) <= Date.parse(period.end)
+  );
 }
 
 /**
@@ -128,8 +147,13 @@ function isDateInPeriod(/* date, period */) {
  * '1999-01-05T02:20:00.000Z' => '1/5/1999, 2:20:00 AM'
  * '2010-12-15T22:59:00.000Z' => '12/15/2010, 10:59:00 PM'
  */
-function formatDate(/* date */) {
-  throw new Error('Not implemented');
+function formatDate(date) {
+  const dateAsDate = new Date(date);
+  const dateAsDateTime = dateAsDate.toLocaleTimeString('en-US', {
+    hour12: true,
+    timeZone: 'UTC',
+  });
+  return `${dateAsDate.getUTCMonth() + 1}/${dateAsDate.getUTCDate()}/${dateAsDate.getUTCFullYear()}, ${dateAsDateTime}`;
 }
 
 /**
